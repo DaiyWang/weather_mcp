@@ -13,6 +13,14 @@ mcp = FastMCP("weather")
 # Esta será a aplicação ASGI principal que o Uvicorn rodará.
 app = FastAPI()
 
+# >>> INTEGRE AS ROTAS DO MCP A ESTE 'app' <<<
+# O FastMCP geralmente lida com isso automaticamente quando você o inicia.
+# No entanto, se FastMCP não está sendo o ASGI callable direto, precisamos
+# adicionar as rotas dele ao nosso app FastAPI principal.
+# Em algumas versões do FastMCP, o 'mcp' pode ser montado.
+# app.mount("/mcp", mcp) # Esta linha PODE ser necessária dependendo da versão.
+# Vamos tentar uma forma mais direta de integrar as ferramentas.
+# Se FastMCP não se integra bem a um FastAPI externo, teremos que reconsiderar.
 
 # Constants
 NWS_API_BASE = "https://api.weather.gov"
