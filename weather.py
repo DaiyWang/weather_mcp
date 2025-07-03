@@ -93,11 +93,12 @@ Forecast: {period['detailedForecast']}
 
     return "\n---\n".join(forecasts)
 
-# --- ESSA LINHA DEVE VOLTAR A SER app = mcp.app ---
-# Com a versão atualizada do mcp[cli], 'mcp.app' deve existir e ser o ASGI callable.
-app = mcp.app 
+# --- AQUI ESTÁ A LINHA MAIS IMPORTANTE PARA O DEPLOY ---
+# Defina 'app' no escopo global para que Uvicorn possa encontrá-lo.
+# Com a versão mais recente do mcp[cli], 'mcp' em si é o ASGI callable.
+app = mcp
 
 if __name__ == "__main__":
     import uvicorn
-    # A variável 'app' já está definida acima.
+    # Para testes locais, chame 'app' que já é 'mcp'
     uvicorn.run(app, host="0.0.0.0", port=8000)
