@@ -24,4 +24,5 @@ EXPOSE 8000
 # Comando para iniciar o servidor Uvicorn.
 # Agora, 'weather:app' aponta para a variável 'app' no weather.py,
 # que definimos como a instância 'mcp'.
+# ... (partes anteriores) ...
 CMD ["uvicorn", "weather:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--log-level", "info"]
