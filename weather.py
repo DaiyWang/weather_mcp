@@ -55,7 +55,7 @@ async def get_alerts(state: str) -> str:
         return "No active alerts for this state."
 
     alerts = [format_alert(feature) for feature in data["features"]]
-    return "\n---\n".join(alerts)
+    return "\n---\n".njoin(alerts)
 
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float) -> str:
@@ -93,10 +93,11 @@ Forecast: {period['detailedForecast']}
 
     return "\n---\n".join(forecasts)
 
-# --- IMPORTANTE: Não deve ter 'app = mcp.app' aqui no escopo global ---
-# A variável 'app' será referenciada diretamente no Dockerfile.
+# --- AQUI ESTÁ A CHAVE: DEFINA 'app' NO ESCOPO GLOBAL ---
+# Isso garante que o Uvicorn sempre encontre a aplicação ASGI esperada.
+app = mcp.app 
 
 if __name__ == "__main__":
     import uvicorn
-    # Para testes locais, ainda usamos mcp.app aqui
-    uvicorn.run(mcp.app, host="0.0.0.0", port=8000)
+    # A variável 'app' já está definida acima.
+    uvicorn.run(app, host="0.0.0.0", port=8000)
