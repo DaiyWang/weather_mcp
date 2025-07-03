@@ -55,7 +55,7 @@ async def get_alerts(state: str) -> str:
         return "No active alerts for this state."
 
     alerts = [format_alert(feature) for feature in data["features"]]
-    return "\n---\n".njoin(alerts)
+    return "\n---\n".join(alerts)
 
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float) -> str:
@@ -93,8 +93,8 @@ Forecast: {period['detailedForecast']}
 
     return "\n---\n".join(forecasts)
 
-# --- AQUI ESTÁ A CHAVE: DEFINA 'app' NO ESCOPO GLOBAL ---
-# Isso garante que o Uvicorn sempre encontre a aplicação ASGI esperada.
+# --- ESSA LINHA DEVE VOLTAR A SER app = mcp.app ---
+# Com a versão atualizada do mcp[cli], 'mcp.app' deve existir e ser o ASGI callable.
 app = mcp.app 
 
 if __name__ == "__main__":
