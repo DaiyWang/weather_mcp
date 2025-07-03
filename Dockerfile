@@ -11,7 +11,6 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Instala as dependências especificadas no requirements.txt
-# Adicionamos '--system' para que 'uv' instale as dependências no ambiente global do container.
 RUN pip install uv && \
     uv pip install -r requirements.txt --system
 
@@ -19,14 +18,10 @@ RUN pip install uv && \
 COPY weather.py .
 
 # Expõe a porta que o Uvicorn estará escutando.
-# Esta é a porta 8000 que definimos no weather.py.
 EXPOSE 8000
 
-# Comando para iniciar o servidor Uvicorn quando o container for executado.
-# 'uvicorn' executa a aplicação ASGI definida em 'weather:app'.
-# 'weather' se refere ao arquivo weather.py e 'app' à variável 'app' nele.
-# --host 0.0.0.0 para escutar em todas as interfaces.
-# --port 8000 para escutar na porta 8000.
-# --workers 1 (ou mais, dependendo da sua necessidade) para um ambiente de produção.
-# --log-level info para ver logs úteis.
+# --- ALTERAÇÃO PRINCIPAL AQUI ---
+# Comando para iniciar o servidor Uvicorn.
+# Agora, apontamos diretamente para 'weather:app', pois 'app' está definida
+# no escopo global do weather.py como mcp.app
 CMD ["uvicorn", "weather:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--log-level", "info"]
