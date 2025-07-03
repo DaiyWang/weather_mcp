@@ -3,9 +3,16 @@
 from typing import Any
 import httpx
 from mcp.server.fastmcp import FastMCP
+from fastapi import FastAPI # Importe FastAPI
 
 # Initialize FastMCP server
 mcp = FastMCP("weather")
+
+# --- NOVO ---
+# Crie uma instância de FastAPI para que possamos adicionar um endpoint de teste.
+# Esta será a aplicação ASGI principal que o Uvicorn rodará.
+app = FastAPI()
+
 
 # Constants
 NWS_API_BASE = "https://api.weather.gov"
@@ -38,6 +45,7 @@ Instructions: {props.get('instruction', 'No specific instructions provided')}
 """
 
 # Implementação das ferramentas (get_alerts, get_forecast) - MANTENHA-AS IGUAIS
+# Estes são @mcp.tool(), eles ainda pertencem ao objeto mcp
 @mcp.tool()
 async def get_alerts(state: str) -> str:
     """Get weather alerts for a US state.
@@ -93,12 +101,13 @@ Forecast: {period['detailedForecast']}
 
     return "\n---\n".join(forecasts)
 
-# --- AQUI ESTÁ A LINHA MAIS IMPORTANTE PARA O DEPLOY ---
-# Defina 'app' no escopo global para que Uvicorn possa encontrá-lo.
-# Com a versão mais recente do mcp[cli], 'mcp' em si é o ASGI callable.
-app = mcp
+# >>> NOVO ENDPOINT DE TESTE DE SAÚDE <<<
+@app.get("/")
+async def read_root():
+    return {"status": "ok", "message": "Server is running"}
 
+# --- INICIALIZAÇÃO DO SERVIDOR ---
+# Uvicorn vai rodar a instância 'app' de FastAPI que criamos
 if __name__ == "__main__":
     import uvicorn
-    # Para testes locais, chame 'app' que já é 'mcp'
     uvicorn.run(app, host="0.0.0.0", port=8000)
