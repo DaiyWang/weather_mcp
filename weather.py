@@ -7,11 +7,11 @@ from mcp.server.fastmcp import FastMCP
 # Initialize FastMCP server
 mcp = FastMCP("weather")
 
-# Constantes (mantidas as mesmas)
+# Constants
 NWS_API_BASE = "https://api.weather.gov"
 USER_AGENT = "weather-app/1.0"
 
-# Funções auxiliares (mantidas as mesmas)
+# Funções auxiliares (make_nws_request, format_alert) - MANTENHA-AS IGUAIS
 async def make_nws_request(url: str) -> dict[str, Any] | None:
     """Make a request to the NWS API with proper error handling."""
     headers = {
@@ -37,7 +37,7 @@ Description: {props.get('description', 'No description available')}
 Instructions: {props.get('instruction', 'No specific instructions provided')}
 """
 
-# Implementação das ferramentas (mantidas as mesmas)
+# Implementação das ferramentas (get_alerts, get_forecast) - MANTENHA-AS IGUAIS
 @mcp.tool()
 async def get_alerts(state: str) -> str:
     """Get weather alerts for a US state.
@@ -93,12 +93,10 @@ Forecast: {period['detailedForecast']}
 
     return "\n---\n".join(forecasts)
 
-# --- REVERTER PARA O ESTADO ANTERIOR A app = mcp.app ---
-# Apenas mantenha a inicialização do mcp = FastMCP("weather")
-# A variável 'app' será referenciada no Dockerfile.
+# --- IMPORTANTE: Não deve ter 'app = mcp.app' aqui no escopo global ---
+# A variável 'app' será referenciada diretamente no Dockerfile.
 
 if __name__ == "__main__":
     import uvicorn
-    # Aqui, para testes locais, você pode continuar usando mcp.app
-    # Mas para o Dockerfile, a referência é direta: weather:mcp.app
+    # Para testes locais, ainda usamos mcp.app aqui
     uvicorn.run(mcp.app, host="0.0.0.0", port=8000)
