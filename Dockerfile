@@ -20,8 +20,8 @@ COPY weather.py .
 # Expõe a porta que o Uvicorn estará escutando.
 EXPOSE 8000
 
-# --- ALTERAÇÃO PRINCIPAL AQUI ---
+# --- ALTERAÇÃO FINAL AQUI NO CMD ---
 # Comando para iniciar o servidor Uvicorn.
-# Agora, apontamos diretamente para 'weather:app', pois 'app' está definida
-# no escopo global do weather.py como mcp.app
+# Agora, 'weather:app' aponta para a variável 'app' no weather.py,
+# que definimos como a instância 'mcp'.
 CMD ["uvicorn", "weather:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--log-level", "info"]
