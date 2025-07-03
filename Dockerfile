@@ -11,8 +11,10 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Instala as dependências especificadas no requirements.txt
+
 RUN pip install uv && \
-    uv pip install -r requirements.txt --system
+    uv pip install -r requirements.txt --system && \
+    echo "Dependencies installed v1.0.0" # Alterar este número a cada tentativa de forçar rebuild
 
 # Copia o restante do código da aplicação para o diretório de trabalho
 COPY weather.py .
